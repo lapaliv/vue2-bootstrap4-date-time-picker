@@ -1,9 +1,9 @@
 {
   "name": "vue2-bootstrap4-date-time-picker",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A Vue.js project",
   "author": "lapaliv <lapaliv@gmail.com>",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
