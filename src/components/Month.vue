@@ -41,11 +41,11 @@
       lang: {
         type: Object,
         required: true
+      },
+      date: {
+        type: Object,
+        required: true
       }
-      // show: {
-      //   type: Boolean,
-      //   required: true
-      // }
     },
     data () {
       return {
@@ -180,18 +180,11 @@
       }
     },
     watch: {
-      '$parent.start' (start) {
-        this.year = start.year
-        this.month = start.month
-        this.day = start.day
+      date (date) {
+        this.year = date.year
+        this.month = date.month
+        this.day = date.day
       }
-    },
-    mounted () {
-      this.$nextTick(() => {
-        this.year = this.$parent.start.year
-        this.month = this.$parent.start.month
-        this.day = this.$parent.start.day
-      })
     }
   }
 </script>

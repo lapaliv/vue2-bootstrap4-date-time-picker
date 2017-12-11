@@ -1,56 +1,53 @@
 <template>
-    <div ref="el">
-        <div class="form-group" ref="form">
-            <label>{{ label }}</label>
-            <div class="input-group" @click.stop="show = true">
-                <input type="text"
-                       class="form-control"
-                       :placeholder="placeholder"
-                       :value="inputValue"
-                       @input="changeInputValue"
-                       @focus="focus"
-                >
-                <span class="input-group-addon">
+    <div class="form-group" ref="form" ref="el">
+        <label>{{ label }}</label>
+        <div class="input-group" @click.stop="show = true" :class="{'above': isAbove}">
+            <input type="text"
+                   class="form-control"
+                   :placeholder="placeholder"
+                   :value="inputValue"
+                   @input="changeInputValue"
+                   @focus="focus"
+            >
+            <span class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                 </span>
+            <div class="dropdown-menu dtp-dropdown px-2 py-1 mt-5"
+                 :class="{'above': isAbove}"
+                 v-show="show"
+                 ref="dropdown"
+                 @click.stop="show = true">
+                <div class="w-100">
+                    <button v-if="hasCalendar"
+                            class="btn btn-sm"
+                            :class="{'btn-link': mode !== MODE_DAYS, 'btn-primary': mode === MODE_DAYS}"
+                            @click="mode = MODE_DAYS"
+                    >
+                        <i class="fa fa-calendar-check-o"></i>
+                    </button>
+                    <button v-if="hasTime"
+                            class="btn btn-sm"
+                            :class="{'btn-link': mode !== MODE_TIME, 'btn-primary': mode === MODE_TIME}"
+                            @click="mode = MODE_TIME"
+                    >
+                        <i class="fa fa-clock-o"></i>
+                    </button>
+                    <button class="btn btn-sm btn-link pull-right" @click="trash" :disabled="inputValue === null">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+                <hr class="my-1">
+                <component is="month-template" :lang="lang" v-show="mode === MODE_DAYS" :date="start"></component>
+                <component is="time-template"
+                           v-show="hasTime && mode === MODE_TIME"
+                           :start-hours="start.hours"
+                           :start-minutes="start.minutes"
+                           :start-seconds="start.seconds"
+                           @startHours="inputTime('start', 'hours', $event)"
+                           @startMinutes="inputTime('start', 'minutes', $event)"
+                           @startSeconds="inputTime('start', 'seconds', $event)"
+                ></component>
             </div>
-        </div>
-        {{ inputValue }}
-        <div class="dropdown-menu dtp-dropdown px-2 py-1"
-             :class="{'above': isAbove}"
-             v-show="show"
-             ref="dropdown"
-             @click.stop="show = true">
-            <div class="w-100">
-                <button v-if="hasCalendar"
-                        class="btn btn-sm"
-                        :class="{'btn-link': mode !== MODE_DAYS, 'btn-primary': mode === MODE_DAYS}"
-                        @click="mode = MODE_DAYS"
-                >
-                    <i class="fa fa-calendar-check-o"></i>
-                </button>
-                <button v-if="hasTime"
-                        class="btn btn-sm"
-                        :class="{'btn-link': mode !== MODE_TIME, 'btn-primary': mode === MODE_TIME}"
-                        @click="mode = MODE_TIME"
-                >
-                    <i class="fa fa-clock-o"></i>
-                </button>
-                <button class="btn btn-sm btn-link pull-right" @click="trash" :disabled="inputValue === null">
-                    <i class="fa fa-trash"></i>
-                </button>
-            </div>
-            <hr class="my-1">
-            <component is="month-template" :lang="lang" v-show="mode === MODE_DAYS"></component>
-            <component is="time-template"
-                       v-show="hasTime && mode === MODE_TIME"
-                       :start-hours="start.hours"
-                       :start-minutes="start.minutes"
-                       :start-seconds="start.seconds"
-                       @startHours="inputTime('start', 'hours', $event)"
-                       @startMinutes="inputTime('start', 'minutes', $event)"
-                       @startSeconds="inputTime('start', 'seconds', $event)"
-            ></component>
         </div>
     </div>
 </template>
@@ -96,8 +93,8 @@
         mode: null,
         inputValue: null,
         start: {
-          year: 2017,
-          month: 10,
+          year: null,
+          month: null,
           day: null,
           hours: 0,
           minutes: 0,
@@ -140,11 +137,12 @@
         return this.start.year === year && this.start.month === month && this.start.day === day
       },
       checkDay (year, month, day) {
-        this.start.year = year
-        this.start.year = year
-        this.start.month = month
-        this.start.month = month
-        this.start.day = day
+        this.start = {
+          year, month, day,
+          hours: this.start.hours,
+          minutes: this.start.minutes,
+          seconds: this.start.seconds
+        }
 
         this.inputValue = this.convertToFormat(this.getPrintFormat(), this.start)
         if (this.hasTime &&
@@ -188,15 +186,17 @@
       clear () {
         this.inputValue = null
         this.mode = constants.MODE_DAYS
-        this.start.year = this.default && this.default.year ? this.default.year : new Date().getFullYear()
-        this.start.month = this.default && this.default.month ? this.default.month : new Date().getMonth()
-        this.start.day = this.default && this.default.day ? this.default.day : null
-        this.start.hours = this.default && this.default.hours ? this.default.hours : 0
-        this.start.minutes = this.default && this.default.minutes ? this.default.minutes : 0
-        this.start.seconds = this.default && this.default.seconds ? this.default.seconds : 0
+        this.start = {
+          year: this.default && this.default.year ? this.default.year : new Date().getFullYear(),
+          month: this.default && this.default.month ? this.default.month : new Date().getMonth(),
+          day: this.default && this.default.day ? this.default.day : null,
+          hours: this.default && this.default.hours ? this.default.hours : 0,
+          minutes: this.default && this.default.minutes ? this.default.minutes : 0,
+          seconds: this.default && this.default.seconds ? this.default.seconds : 0
+        }
       },
       changeInputValue (event) {
-        let parse = this.parseFromFormat(event.target.value, this.printFormat)
+        let parse = this.parseFromFormat(event.target.value, this.getPrintFormat())
         if (parse === null) {
           this.clear()
           this.inputValue = event.target.value
@@ -227,16 +227,31 @@
     },
     watch: {
       inputValue (date) {
-        if (date && this.parseFromFormat(date, this.printFormat) !== null) {
+        if (date && this.parseFromFormat(date, this.getPrintFormat()) !== null) {
           this.$emit('input', this.convertToFormat(this.getResultFormat(), this.start))
         } else {
           this.$emit('input', date)
+        }
+      },
+      show (show) {
+        if (show) {
+          this.mode = this.MODE_DAYS
         }
       }
     },
     mounted () {
       this.$nextTick(() => {
-        this.clear()
+        if (this.value && this.value.length) {
+          let parse = this.parseFromFormat(this.value, this.getResultFormat())
+          if (parse === null) {
+            this.clear()
+          } else {
+            this.start = Object.assign({}, parse)
+            this.inputValue = this.convertToFormat(this.getPrintFormat(), parse)
+          }
+        } else {
+          this.clear()
+        }
       })
 
       document.addEventListener('click', () => {
@@ -249,7 +264,6 @@
 <style scoped>
     .dtp-dropdown {
         position: absolute;
-        /*top: 0;*/
         display: block;
         top: auto;
     }
@@ -274,7 +288,11 @@
         margin-top: -435px;
     }
 
-    .above {
+    .above .dtp-dropdown {
         bottom: 100%;
+    }
+
+    .input-group {
+        position: relative;
     }
 </style>
