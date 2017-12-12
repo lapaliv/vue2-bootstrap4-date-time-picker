@@ -1,5 +1,5 @@
 <template>
-    <div class="form-group" ref="form" ref="el">
+    <div class="form-group" ref="el">
         <label>{{ label }}</label>
         <div class="input-group" @click.stop="show = true" :class="{'above': isAbove}">
             <input type="text"
