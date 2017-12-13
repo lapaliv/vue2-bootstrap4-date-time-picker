@@ -75,14 +75,14 @@
         type: String,
         'default': null
       },
-      position: {
-        type: String,
-        'default': 'top',
-        // 'default': 'bottom left',
-        validator: function (value) {
-          return ['bottom', 'top', 'bottom left', 'bottom right', 'top left', 'top right'].indexOf(value) !== -1
-        }
-      },
+      // position: {
+      //   type: String,
+      //   'default': 'top',
+      // 'default': 'bottom left',
+      //   validator: function (value) {
+      //     return ['bottom', 'top', 'bottom left', 'bottom right', 'top left', 'top right'].indexOf(value) !== -1
+      //   }
+      // },
       default: {
         type: Object
       }
@@ -157,10 +157,9 @@
         this.clear()
       },
       inputTime (type, name, value) {
-        this[type][name] = value
-        if (this.start.day) {
-          this.inputValue = this.convertToFormat(this.getPrintFormat(), this[type])
-        }
+        let data = Object.assign({}, this[type])
+        data[name] = value
+        this[type] = data
       },
       /**
        * Конвертирует указанную дату в нужный формат
@@ -200,9 +199,9 @@
         if (parse === null) {
           this.clear()
           this.inputValue = event.target.value
+          this.$emit('input', event.target.value)
         } else {
           this.start = Object.assign({}, this.start, parse)
-          this.inputValue = this.convertToFormat(this.getPrintFormat(), this.start)
         }
       },
 
@@ -226,16 +225,22 @@
       }
     },
     watch: {
-      inputValue (date) {
-        if (date && this.parseFromFormat(date, this.getPrintFormat()) !== null) {
-          this.$emit('input', this.convertToFormat(this.getResultFormat(), this.start))
-        } else {
-          this.$emit('input', date)
-        }
-      },
       show (show) {
         if (show) {
           this.mode = this.MODE_DAYS
+        }
+      },
+      value (date) {
+        if (date && this.parseFromFormat(date, this.getResultFormat()) !== null) {
+          this.start = this.parseFromFormat(date, this.getResultFormat())
+        } else {
+          this.clear()
+        }
+      },
+      start (start) {
+        if (start.day) {
+          this.inputValue = this.convertToFormat(this.getPrintFormat(), start)
+          this.$emit('input', this.convertToFormat(this.getResultFormat(), start))
         }
       }
     },
