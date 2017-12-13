@@ -37,9 +37,11 @@
                     </button>
                 </div>
                 <hr class="my-1">
+                {{ mode }}
                 <component is="month-template" :lang="lang" v-show="mode === MODE_DAYS" :date="start"></component>
                 <component is="time-template"
-                           v-show="hasTime && mode === MODE_TIME"
+                           v-if="hasTime"
+                           v-show="mode === MODE_TIME"
                            :start-hours="start.hours"
                            :start-minutes="start.minutes"
                            :start-seconds="start.seconds"
