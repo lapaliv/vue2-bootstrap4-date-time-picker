@@ -3,7 +3,7 @@
         <label>{{ label }}</label>
         <component is="picker" @input="input" :format="format" :resultFormat="resultFormat" :printFormat="printFormat"></component>
     </div>
-    <component is="picker" @input="input" v-else></component>
+    <component is="picker" @input="input" :format="format" :resultFormat="resultFormat" :printFormat="printFormat" v-else></component>
 </template>
 
 <script>
