@@ -18,7 +18,7 @@
       },
       label: {
         type: String,
-        'default': 'Label for date picker'
+        'default': null
       },
       value: {
         type: String,
