@@ -87,7 +87,7 @@
         validator: function (value) {
           return value >= 0 && value <= 59
         }
-      },
+      }
       // show: {
       //   type: Boolean,
       //   required: true

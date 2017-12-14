@@ -10,7 +10,7 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  template: '<div><DateTimePicker v-model="date" print-format="d M Y H:i" :default="{hours: 23}"/> value: {{ date }}</div>',
+  template: '<div><DateTimePicker v-model="date" print-format="Y-m-d H:i" :default="{hours: 23}"/> value: {{ date }}</div>',
   data () {
     return {
       date: null

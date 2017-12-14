@@ -54,38 +54,38 @@ export default {
      * @return {{d: *, D: string, j: number, l: string, N: number, w: number, z: number, W: number, F, m: *, M, n: number, L: number, Y: number, y: *, a: string, g: number, G: number, h: *, H: *, i: *, s: *}}
      */
     getAllParamsForFormat (year, month, day, hours, minutes, seconds) {
-      const isLeapYear = new Date(year, month, 29).getMonth() === 1
-      const dayOfWeek = new Date(year, month, day).getDay()
+      const isLeapYear = year && month && day ? new Date(year, month, 29).getMonth() === 1 : null
+      const dayOfWeek = year && month && day ? new Date(year, month, day).getDay() : null
 
       // День в году
       let countDayInYear = 0
-      countDayInYear += day
+      countDayInYear += day || 0
 
       // Недель в году
-      let countWeeksInYear = 0
+      // let countWeeksInYear = 0
       let allMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
       let result = {
         // День
-        d: this.convertToDoubleNumber(day),
-        D: this.lang.shortMonday, // День недели (сокращенно)
-        j: parseInt(day),
-        l: this.lang.monday, // День недели (полностью)
-        N: dayOfWeek === 0 ? 7 : dayOfWeek, // Порядковый номер дня недели (1 - пн, 7 - ВС)
+        d: this.convertToDoubleNumber(day || 0),
+        // D: this.lang.shortMonday, // День недели (сокращенно)
+        j: parseInt(day || 0),
+        // l: this.lang.monday, // День недели (полностью)
+        N: dayOfWeek ? (dayOfWeek === 0 ? 7 : dayOfWeek) : null, // Порядковый номер дня недели (1 - пн, 7 - ВС)
         w: dayOfWeek, // Порядковый номер дня недели (0 - ВС, 6 - СБ)
         z: countDayInYear - 1, // Порядковый номер дня в году (начиная с 0),
         // Неделя
-        W: countWeeksInYear, // Порядковый номер недели года в соответствии со стандартом ISO-8601; недели начинаются с понедельника
+        // W: countWeeksInYear, // Порядковый номер недели года в соответствии со стандартом ISO-8601; недели начинаются с понедельника
         // Месяц
-        F: this.lang[allMonths[month].toLowerCase()], // Полное наименование месяца, например January или March
-        m: this.convertToDoubleNumber(month + 1),
-        M: this.lang['short' + allMonths[month]], // Сокращенное наименование месяца, 3 символа
-        n: parseInt(month + 1),
+        F: month === null ? null : this.lang[allMonths[month].toLowerCase()], // Полное наименование месяца, например January или March
+        m: month === null ? '00' : this.convertToDoubleNumber(month + 1),
+        M: month === null ? null : this.lang['short' + allMonths[month]], // Сокращенное наименование месяца, 3 символа
+        n: month === null ? 0 : parseInt(month + 1),
         // t: parseInt(new Date().getDaysForMonth(year, month)),
         // Год
         L: isLeapYear ? 1 : 0,
-        Y: parseInt(year),
-        y: this.convertToDoubleNumber(year % 100),
+        Y: year ? parseInt(year) : '0000',
+        y: year ? this.convertToDoubleNumber(year % 100) : '00',
         // Время
         a: (hours > 12 ? 'pm' : (hours === 12 && minutes > 0 ? 'pm' : (hours === 12 && minutes > 0 && seconds > 0 ? 'pm' : 'am'))),
         g: (parseInt(hours) > 12 ? parseInt(hours) - 12 : parseInt(hours)),
@@ -176,8 +176,8 @@ class Format {
   }
 
   fromY (value) {
-    return value.slice(0, 4) > 0 ? {
-      year: parseInt(value.slice(0, 4)),
+    return value.slice(0, 4) >= 0 ? {
+      year: parseInt(value.slice(0, 4)) === 0 ? null : parseInt(value.slice(0, 4)),
       str: value.slice(4)
     } : null
   }
@@ -238,6 +238,13 @@ class Format {
           month: index - 1,
           str: value.replace(month, '')
         }
+      }
+    }
+
+    if (value.indexOf(0) === 0) {
+      return {
+        month: null,
+        str: value.replace(0, '')
       }
     }
 

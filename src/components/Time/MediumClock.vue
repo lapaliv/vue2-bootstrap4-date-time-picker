@@ -4,8 +4,8 @@
              @click="input(tick.value)"
              v-for="tick in ticks"
              :class="{'bg-warning': parseInt(tick.value) === value }"
-             :style="{top: tick.top, left: tick.left}">
-            {{ tick.value }}
+             :style="{top: tick.top, left: tick.left}"
+        >{{ tick.value }}
         </div>
     </div>
 </template>
@@ -73,30 +73,22 @@
         return result
       },
       tickWidth () {
-        return 28
+        return 30
       },
       tickHeight () {
-        return 24
+        return 28
       },
       x () {
-        return this.$el ? this.$el.offsetLeft + (this.$el.offsetWidth / 2) - (this.tickWidth / 2) : 0
+        return this.radius - (this.tickWidth / 2)
       },
       y () {
-        return this.$el ? this.$el.offsetTop + (this.$el.offsetHeight / 2) - (this.tickHeight / 2) : 0
+        return this.radius - (this.tickHeight / 2)
       },
       radius () {
-        return this.$el ? this.$el.offsetWidth / 2 : 0
+        return 120
       }
     },
     methods: {
-      // loadConstantsForTicks () {
-      //   const tickWidth = 28
-      //   const tickHeight = 24
-      //
-      //   this.x = this.$el.offsetLeft + (this.$el.offsetWidth / 2) - (tickWidth / 2)
-      //   this.y = this.$el.offsetTop + (this.$el.offsetHeight / 2) - (tickHeight / 2)
-      //   this.radius = this.$el.offsetWidth / 2
-      // },
       input (value) {
         this.$emit('input', parseInt(value))
       }
@@ -115,6 +107,7 @@
     }
 
     .clock {
+        position: relative;
         width: 240px;
         max-width: 240px;
         height: 240px;
@@ -125,5 +118,9 @@
         position: absolute;
         padding-top: 2px;
         padding-bottom: 2px;
+        width: 30px;
+        height: 28px;
+        box-sizing: border-box;
+        text-align: center;
     }
 </style>
