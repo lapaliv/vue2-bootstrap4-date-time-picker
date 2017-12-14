@@ -1,6 +1,5 @@
 <template>
     <div class="input-group" @click.stop="show = true" :class="{'above': isAbove}">
-        {{ printFormat }}
         <input type="text"
                class="form-control"
                :placeholder="$parent.placeholder"
