@@ -9,6 +9,7 @@
                        :value="inputValue"
                        @input="changeInputValue"
                        @focus="focus"
+                       :style="{zIndex: zIndex}"
                 >
                 <span class="input-group-addon">
                     <i class="fa fa-calendar"></i>
@@ -88,6 +89,10 @@
       },
       default: {
         type: Object
+      },
+      zIndex: {
+        type: Number,
+        'default': 1
       }
     },
     data () {
