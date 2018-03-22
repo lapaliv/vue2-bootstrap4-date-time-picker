@@ -222,14 +222,14 @@
 
         const spaceAbove = this.$el.getBoundingClientRect().top
         const spaceBelow = window.innerHeight - this.$el.getBoundingClientRect().bottom
-        const hasEnoughSpaceBelow = spaceBelow > 377
+        const hasEnoughSpaceBelow = spaceBelow > 400
 
         if (hasEnoughSpaceBelow || spaceBelow > spaceAbove || this.openDirection === 'below' || this.openDirection === 'bottom') {
           this.prefferedOpenDirection = 'below'
-          this.optimizedHeight = Math.min(spaceBelow - 40, 377)
+          this.optimizedHeight = Math.min(spaceBelow - 40, 400)
         } else {
           this.prefferedOpenDirection = 'above'
-          this.optimizedHeight = Math.min(spaceAbove - 40, 377)
+          this.optimizedHeight = Math.min(spaceAbove - 40, 400)
         }
       }
     },
