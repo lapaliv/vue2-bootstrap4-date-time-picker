@@ -314,5 +314,6 @@
         border-right: 1px solid rgba(0, 0, 0, .15);
         border-top-right-radius: .25rem;
         border-bottom-right-radius: .25rem;
+        z-index: 0;
     }
 </style>
