@@ -1,5 +1,5 @@
 <template>
-    <div class="input-group" @click.stop="show = true" :class="{'above': isAbove}">
+    <div class="input-group" @click.stop="focus" :class="{'above': isAbove}">
         <input type="text"
                class="form-control"
                :placeholder="$parent.placeholder"
