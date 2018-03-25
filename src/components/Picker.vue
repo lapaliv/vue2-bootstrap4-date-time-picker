@@ -274,7 +274,7 @@
       let el = this.$el
       do {
         el = el.parentNode
-        el..addEventListener('click', () => {
+        el.addEventListener('click', () => {
           this.show = false
         })
       } while(el)
