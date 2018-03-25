@@ -248,7 +248,7 @@
           this.mode = this.hasCalendar ? constants.MODE_DAYS : constants.MODE_TIME
           window.addEventListener('scroll', this.scrollAction)
         } else {
-          window.removeEventListener(this.scrollAction)
+          window.removeEventListener('scroll', this.scrollAction)
         }
       },
       '$parent.value' (date) {
