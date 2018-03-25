@@ -233,12 +233,22 @@
           this.prefferedOpenDirection = 'above'
           this.optimizedHeight = Math.min(spaceAbove - 40, 400)
         }
+      },
+      scrollAction() {
+        if(window.scrollY + 300 > this.oldScroll) {
+          this.show = false
+          this.oldScroll = window.scrollY
+        }
       }
     },
     watch: {
       show (show) {
         if (show) {
+          this.oldScroll = window.scrollY
           this.mode = this.hasCalendar ? constants.MODE_DAYS : constants.MODE_TIME
+          window.addEventListener('scroll', this.scrollAction)
+        } else {
+          window.removeEventListener(this.scrollAction)
         }
       },
       '$parent.value' (date) {
@@ -282,14 +292,6 @@
           })
         }
       } while(el)
-      
-      this.oldScroll = window.scrollY
-      window.addEventListener('scroll', () => {
-        if(window.scrollY + 100 > this.oldScroll) {
-          this.show = false
-          this.oldScroll = window.scrollY
-        }
-      })
     }
   }
 </script>
