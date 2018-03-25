@@ -78,7 +78,8 @@
           seconds: 0
         },
         openDirection: '',
-        prefferedOpenDirection: 'below'
+        prefferedOpenDirection: 'below',
+        oldScroll: 0
       }
     },
     computed: {
@@ -281,6 +282,14 @@
           })
         }
       } while(el)
+      
+      this.oldScroll = window.scrollY
+      window.addEventListener('scroll', (event) => {
+        if(event.scrollY + 100 > this.oldScroll) {
+          this.show = false
+          this.oldScroll = event.scrollY
+        }
+      })
     }
   }
 </script>
