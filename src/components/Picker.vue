@@ -270,10 +270,14 @@
           this.clear()
         }
       })
-
-      document.addEventListener('click', () => {
-        this.show = false
-      })
+      
+      let el = this.$el
+      do {
+        el = el.parentNode
+        el..addEventListener('click', () => {
+          this.show = false
+        })
+      } while(el)
     }
   }
 </script>
