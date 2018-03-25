@@ -284,10 +284,10 @@
       } while(el)
       
       this.oldScroll = window.scrollY
-      window.addEventListener('scroll', (event) => {
-        if(event.scrollY + 100 > this.oldScroll) {
+      window.addEventListener('scroll', () => {
+        if(window.scrollY + 100 > this.oldScroll) {
           this.show = false
-          this.oldScroll = event.scrollY
+          this.oldScroll = window.scrollY
         }
       })
     }
