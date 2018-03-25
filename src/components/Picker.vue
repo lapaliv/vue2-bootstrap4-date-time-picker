@@ -1,5 +1,5 @@
 <template>
-    <div class="input-group picker" @click.stop="focus" :class="{'above': isAbove}" :style="{zIndex: show ? 1100 : null}">
+    <div class="input-group" @click.stop="focus" :class="{'above': isAbove}" :style="{zIndex: show ? 1100 : null}">
         <input type="text"
                class="form-control"
                :placeholder="$parent.placeholder"
